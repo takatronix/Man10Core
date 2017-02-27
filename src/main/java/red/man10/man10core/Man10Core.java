@@ -5,11 +5,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Man10Core extends JavaPlugin {
+public final class Man10Core extends JavaPlugin implements Listener {
 
     /////////////////////////////////
     //        設定値
@@ -29,7 +30,7 @@ public final class Man10Core extends JavaPlugin {
         mysql_port = this.getConfig().getString("server_config.mysql_port");
         mysql_id = this.getConfig().getString("server_config.mysql_id");
         mysql_pass = this.getConfig().getString("server_config.mysql_pass");
-        mysql_dbname = this.getConfig().getString("server_config.db_name");
+        mysql_dbname = this.getConfig().getString("server_config.dbname");
         getLogger().info("Config loaded");
         return;
     }
@@ -42,6 +43,7 @@ public final class Man10Core extends JavaPlugin {
         getLogger().info("Enabled");
         this.saveDefaultConfig();
         loadConfig();
+        getServer().getPluginManager().registerEvents (this,this);
     }
 
     /////////////////////////////////
@@ -58,7 +60,6 @@ public final class Man10Core extends JavaPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Player p = (Player) sender;
-
         return true;
     }
 
@@ -68,7 +69,7 @@ public final class Man10Core extends JavaPlugin {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e){
         Player p = e.getPlayer();
-        p.sendMessage(ChatColor.RED + "Welcome to Man10 Server");
+        p.sendMessage(ChatColor.YELLOW  + "Welcome to Man10 Server");
     }
     /////////////////////////////////
     //      チャットイベント
