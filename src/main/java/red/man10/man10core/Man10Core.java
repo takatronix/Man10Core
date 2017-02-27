@@ -30,7 +30,7 @@ public final class Man10Core extends JavaPlugin implements Listener {
         mysql_port = this.getConfig().getString("server_config.mysql_port");
         mysql_id = this.getConfig().getString("server_config.mysql_id");
         mysql_pass = this.getConfig().getString("server_config.mysql_pass");
-        mysql_dbname = this.getConfig().getString("server_config.dbname");
+        mysql_dbname = this.getConfig().getString("server_config.mysql_dbname");
         getLogger().info("Config loaded");
         return;
     }
@@ -79,5 +79,17 @@ public final class Man10Core extends JavaPlugin implements Listener {
         Player p = e.getPlayer();
         String message = e.getMessage();
         p.sendMessage(ChatColor.RED + message);
+    }
+
+    void createMessageTable(){
+
+        String sql = "CREATE TABLE `messages` (\n" +
+                "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
+                "  `server` varchar(100) DEFAULT NULL,\n" +
+                "  `name` varchar(100) DEFAULT NULL,\n" +
+                "  `message` varchar(400) DEFAULT NULL,\n" +
+                "  `timestamp` varchar(50) DEFAULT NULL,\n" +
+                "  PRIMARY KEY (`id`)\n" +
+                ") ENGINE=InnoDB AUTO_INCREMENT=104377 DEFAULT CHARSET=utf8;";
     }
 }
