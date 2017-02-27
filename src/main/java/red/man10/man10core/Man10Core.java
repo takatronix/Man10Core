@@ -1,5 +1,6 @@
 package red.man10.man10core;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -9,6 +10,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.sql.*;
 
 public final class Man10Core extends JavaPlugin implements Listener {
 
@@ -44,6 +47,9 @@ public final class Man10Core extends JavaPlugin implements Listener {
         this.saveDefaultConfig();
         loadConfig();
         getServer().getPluginManager().registerEvents (this,this);
+
+        //   テーブル作成
+        createTables();
     }
 
     /////////////////////////////////
@@ -81,15 +87,46 @@ public final class Man10Core extends JavaPlugin implements Listener {
         p.sendMessage(ChatColor.RED + message);
     }
 
-    void createMessageTable(){
 
-        String sql = "CREATE TABLE `messages` (\n" +
-                "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
-                "  `server` varchar(100) DEFAULT NULL,\n" +
-                "  `name` varchar(100) DEFAULT NULL,\n" +
-                "  `message` varchar(400) DEFAULT NULL,\n" +
-                "  `timestamp` varchar(50) DEFAULT NULL,\n" +
-                "  PRIMARY KEY (`id`)\n" +
-                ") ENGINE=InnoDB AUTO_INCREMENT=104377 DEFAULT CHARSET=utf8;";
+    String sqlCrateMessageTable = "CREATE TABLE `messages` (\n" +
+            "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
+            "  `server` varchar(100) DEFAULT NULL,\n" +
+            "  `name` varchar(100) DEFAULT NULL,\n" +
+            "  `message` varchar(400) DEFAULT NULL,\n" +
+            "  `timestamp` varchar(50) DEFAULT NULL,\n" +
+            "  PRIMARY KEY (`id`)\n" +
+            ") ENGINE=InnoDB AUTO_INCREMENT=104377 DEFAULT CHARSET=utf8;";
+
+    void createTables(){
+        executeSQL(sqlCrateMessageTable);
+    }
+
+    ////////////////////////////////
+    //      SQL実行
+    ////////////////////////////////
+    Boolean executeSQL(String sql){
+        getLogger().info("executing SQL" + sql);
+        Connection conn = null;
+        try {
+            //      データベース作成
+            Class.forName("com.mysql.jdbc.Driver");
+            String databaseURL =  "jdbc:mysql://" + mysql_ip + "/" + mysql_dbname ;
+            getLogger().info(databaseURL);
+
+            conn = DriverManager.getConnection(databaseURL,mysql_id,mysql_pass);
+            Statement st = conn.createStatement();
+            getLogger().info("connected");
+            st.execute(sql);
+
+            st.close();
+            conn.close();
+            getLogger().info("SQL performed");
+            return true;
+        } catch(ClassNotFoundException e){
+            getLogger().warning("Could not read driver");
+        } catch(SQLException e){
+            getLogger().warning("Database connection error");
+        }
+        return false;
     }
 }
