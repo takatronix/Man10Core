@@ -1,6 +1,5 @@
 package red.man10.man10core;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -110,10 +109,10 @@ public final class Man10Core extends JavaPlugin implements Listener {
         try {
             //      データベース作成
             Class.forName("com.mysql.jdbc.Driver");
-            String databaseURL =  "jdbc:mysql://" + mysql_user + "/" + mysql_db ;
+            String databaseURL =  "jdbc:mysql://" + mysql_ip + "/" + mysql_db ;
             //getLogger().info(databaseURL);
 
-            conn = DriverManager.getConnection(databaseURL,mysql_id,mysql_pass);
+            conn = DriverManager.getConnection(databaseURL,mysql_user,mysql_pass);
             Statement st = conn.createStatement();
             st.execute(sql);
 
