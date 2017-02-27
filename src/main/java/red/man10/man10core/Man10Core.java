@@ -115,7 +115,6 @@ public final class Man10Core extends JavaPlugin implements Listener {
 
             conn = DriverManager.getConnection(databaseURL,mysql_id,mysql_pass);
             Statement st = conn.createStatement();
-            getLogger().info("connected");
             st.execute(sql);
 
             st.close();
