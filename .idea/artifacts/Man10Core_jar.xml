@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Man10Core:jar">
+    <output-path>$PROJECT_DIR$/../spigot/plugins/</output-path>
+    <root id="archive" name="Man10Core.jar">
+      <element id="module-output" name="Man10Core" />
+    </root>
+  </artifact>
+</component>
