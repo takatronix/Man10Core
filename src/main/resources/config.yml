@@ -1,0 +1,6 @@
+server_config:
+  mysql_ip: localhost
+  mysql_port: 3306
+  mysql_id: root
+  mysql_pass: password
+  db_name: man10
