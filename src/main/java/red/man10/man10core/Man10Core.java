@@ -18,24 +18,23 @@ public final class Man10Core extends JavaPlugin implements Listener {
     /////////////////////////////////
     //        設定値
     /////////////////////////////////
-    String  mysql_ip;
+    String  mysql_user;
     String  mysql_port;
     String  mysql_id;
     String  mysql_pass;
-    String  mysql_dbname;
+    String  mysql_db;
 
     /////////////////////////////////
     //       設定ファイル読み込み
     /////////////////////////////////
     public void loadConfig(){
         this.reloadConfig();
-        mysql_ip = this.getConfig().getString("server_config.mysql_ip");
+        mysql_user = this.getConfig().getString("server_config.mysql_user");
         mysql_port = this.getConfig().getString("server_config.mysql_port");
         mysql_id = this.getConfig().getString("server_config.mysql_id");
         mysql_pass = this.getConfig().getString("server_config.mysql_pass");
-        mysql_dbname = this.getConfig().getString("server_config.mysql_dbname");
+        mysql_db = this.getConfig().getString("server_config.mysql_db");
         getLogger().info("Config loaded");
-        return;
     }
 
     /////////////////////////////////
@@ -85,6 +84,7 @@ public final class Man10Core extends JavaPlugin implements Listener {
         Player p = e.getPlayer();
         String message = e.getMessage();
         p.sendMessage(ChatColor.RED + message);
+
     }
 
 
@@ -105,13 +105,13 @@ public final class Man10Core extends JavaPlugin implements Listener {
     //      SQL実行
     ////////////////////////////////
     Boolean executeSQL(String sql){
-        getLogger().info("executing SQL" + sql);
-        Connection conn = null;
+       // getLogger().info("executing SQL" + sql);
+        Connection conn;
         try {
             //      データベース作成
             Class.forName("com.mysql.jdbc.Driver");
-            String databaseURL =  "jdbc:mysql://" + mysql_ip + "/" + mysql_dbname ;
-            getLogger().info(databaseURL);
+            String databaseURL =  "jdbc:mysql://" + mysql_user + "/" + mysql_db ;
+            //getLogger().info(databaseURL);
 
             conn = DriverManager.getConnection(databaseURL,mysql_id,mysql_pass);
             Statement st = conn.createStatement();
@@ -120,7 +120,7 @@ public final class Man10Core extends JavaPlugin implements Listener {
 
             st.close();
             conn.close();
-            getLogger().info("SQL performed");
+            //getLogger().info("SQL performed");
             return true;
         } catch(ClassNotFoundException e){
             getLogger().warning("Could not read driver");
