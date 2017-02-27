@@ -18,9 +18,9 @@ public final class Man10Core extends JavaPlugin implements Listener {
     /////////////////////////////////
     //        設定値
     /////////////////////////////////
-    String  mysql_user;
+    String  mysql_ip;
     String  mysql_port;
-    String  mysql_id;
+    String  mysql_user;
     String  mysql_pass;
     String  mysql_db;
 
@@ -29,9 +29,9 @@ public final class Man10Core extends JavaPlugin implements Listener {
     /////////////////////////////////
     public void loadConfig(){
         this.reloadConfig();
-        mysql_user = this.getConfig().getString("server_config.mysql_user");
+        mysql_ip = this.getConfig().getString("server_config.mysql_ip");
         mysql_port = this.getConfig().getString("server_config.mysql_port");
-        mysql_id = this.getConfig().getString("server_config.mysql_id");
+        mysql_user = this.getConfig().getString("server_config.mysql_user");
         mysql_pass = this.getConfig().getString("server_config.mysql_pass");
         mysql_db = this.getConfig().getString("server_config.mysql_db");
         getLogger().info("Config loaded");
