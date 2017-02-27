@@ -88,7 +88,7 @@ public final class Man10Core extends JavaPlugin implements Listener {
     }
 
 
-    String sqlCrateMessageTable = "CREATE TABLE `messages` (\n" +
+    String sqlCrateChatLogTable = "CREATE TABLE `chat_log` (\n" +
             "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
             "  `server` varchar(100) DEFAULT NULL,\n" +
             "  `name` varchar(100) DEFAULT NULL,\n" +
@@ -98,7 +98,7 @@ public final class Man10Core extends JavaPlugin implements Listener {
             ") ENGINE=InnoDB AUTO_INCREMENT=104377 DEFAULT CHARSET=utf8;";
 
     void createTables(){
-        executeSQL(sqlCrateMessageTable);
+        executeSQL(sqlCrateChatLogTable);
     }
 
     ////////////////////////////////
