@@ -44,6 +44,10 @@ public class VaultManager {
     double  getBalance(UUID uuid){
         return economy.getBalance(Bukkit.getOfflinePlayer(uuid).getPlayer());
     }
+
+    /////////////////////////////////////
+    //      残高確認
+    /////////////////////////////////////
     void showBalance(UUID uuid){
         OfflinePlayer p = Bukkit.getOfflinePlayer(uuid).getPlayer();
         double money = getBalance(uuid);
@@ -57,7 +61,6 @@ public class VaultManager {
         EconomyResponse resp = economy.withdrawPlayer(p,money);
         if(resp.transactionSuccess()){
             p.getPlayer().sendMessage(ChatColor.YELLOW + "$"+money+"支払いました");
-        //    p.getPlayer().sendMessage("$"+money+"");
             return true;
         }
         return  false;
@@ -70,10 +73,8 @@ public class VaultManager {
         EconomyResponse resp = economy.depositPlayer(p,money);
         if(resp.transactionSuccess()){
             p.getPlayer().sendMessage(ChatColor.YELLOW + "$"+money+"受取りました");
-           // serverMessage("振込成功" + p.getName() + " $"+ money);
             return true;
         }
-       // serverMessage("振込失敗" + p.getName() + " $"+ money);
         return  false;
     }
 

@@ -71,6 +71,11 @@
             <id>pex-repo</id>
             <url>http://pex-repo.aoeu.xyz</url>
         </repository>
+        <repository>
+            <id>inventive-repo</id>
+            <url>https://repo.inventivetalent.org/content/groups/public/</url>
+        </repository>
+
     </repositories>
 
     <dependencies>
@@ -86,13 +91,40 @@
             <version>1.6</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>ru.tehkode</groupId>
             <artifactId>PermissionsEx</artifactId>
             <version>1.23.4</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/PermissionsEx-1.23.4.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.tehkode</groupId>
+            <artifactId>PermissionsEx</artifactId>
+            <version>1.23.4</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/SpigotLib.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.inventivetalent</groupId>
+            <artifactId>titleapi</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.inventivetalent</groupId>
+            <artifactId>particleapi</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.inventivetalent</groupId>
+            <artifactId>glowapi</artifactId>
+            <version>1.4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.inventivetalent.packetlistener</groupId>
+            <artifactId>api</artifactId>
+            <version>3.5.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

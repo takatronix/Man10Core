@@ -1,24 +1,23 @@
 package red.man10.man10core;
 
 import org.bukkit.ChatColor;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.sql.*;
+
 
 public final class Man10Core extends JavaPlugin implements Listener {
 
 
-
-    VaultManager vaultManager = null;
-    MySqlManager mySqlManager = null;
+    VaultManager vault = null;
+    MySQLManager mysql = null;
 
     /////////////////////////////////
     //      起動
@@ -30,9 +29,10 @@ public final class Man10Core extends JavaPlugin implements Listener {
         //loadConfig();
         getServer().getPluginManager().registerEvents (this,this);
 
+        vault = new VaultManager(this);
+        mysql = new MySQLManager(this,"Man10Core");
         //   テーブル作成
         createTables();
-        vaultManager = new VaultManager(this);
     }
 
     /////////////////////////////////
@@ -69,15 +69,11 @@ public final class Man10Core extends JavaPlugin implements Listener {
         String message = e.getMessage();
         if(message.contains("ohaman")){
             p.sendMessage("あいさつしたので国王からお小遣いをもらった");
-            vaultManager.deposit(e.getPlayer().getUniqueId(),10000);
+            vault.deposit(e.getPlayer().getUniqueId(),10000);
           //  vaultManager.showBalance(e.getPlayer().getUniqueId());
             return;
         }
 
-
-//        vaultManager.deposit(e.getPlayer().getUniqueId(),1500);
- //       vaultManager.withdraw(e.getPlayer().getUniqueId(),100);
-        vaultManager.showBalance(e.getPlayer().getUniqueId());
     }
 
     String sqlCrateChatLogTable = "CREATE TABLE `chat_log` (\n" +
@@ -89,9 +85,22 @@ public final class Man10Core extends JavaPlugin implements Listener {
             "  PRIMARY KEY (`id`)\n" +
             ") ENGINE=InnoDB AUTO_INCREMENT=104377 DEFAULT CHARSET=utf8;";
 
-    void createTables(){
+    String sqlMessageTable = "CREATE TABLE `chat_log` (\n" +
+            "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
+            "  `server` varchar(100) DEFAULT NULL,\n" +
+            "  `name` varchar(100) DEFAULT NULL,\n" +
+            "  `message` varchar(400) DEFAULT NULL,\n" +
+            "  `timestamp` varchar(50) DEFAULT NULL,\n" +
+            "  PRIMARY KEY (`id`)\n" +
+            ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+    void createTables(){;
         //executeSQL(sqlCrateChatLogTable);
+
+        mysql.query(sqlMessageTable);
+
     }
+
+    //      基本表示系
 
 
 }
