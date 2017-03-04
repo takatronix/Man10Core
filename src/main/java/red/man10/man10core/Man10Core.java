@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,27 +15,10 @@ import java.sql.*;
 
 public final class Man10Core extends JavaPlugin implements Listener {
 
-    /////////////////////////////////
-    //        設定値
-    /////////////////////////////////
-    String  mysql_ip;
-    String  mysql_port;
-    String  mysql_user;
-    String  mysql_pass;
-    String  mysql_db;
 
-    /////////////////////////////////
-    //       設定ファイル読み込み
-    /////////////////////////////////
-    public void loadConfig(){
-        this.reloadConfig();
-        mysql_ip = this.getConfig().getString("server_config.mysql_ip");
-        mysql_port = this.getConfig().getString("server_config.mysql_port");
-        mysql_user = this.getConfig().getString("server_config.mysql_user");
-        mysql_pass = this.getConfig().getString("server_config.mysql_pass");
-        mysql_db = this.getConfig().getString("server_config.mysql_db");
-        getLogger().info("Config loaded");
-    }
+
+    VaultManager vaultManager = null;
+    MySqlManager mySqlManager = null;
 
     /////////////////////////////////
     //      起動
@@ -43,11 +27,12 @@ public final class Man10Core extends JavaPlugin implements Listener {
     public void onEnable() {
         getLogger().info("Enabled");
         this.saveDefaultConfig();
-        loadConfig();
+        //loadConfig();
         getServer().getPluginManager().registerEvents (this,this);
 
         //   テーブル作成
         createTables();
+        vaultManager = new VaultManager(this);
     }
 
     /////////////////////////////////
@@ -82,10 +67,18 @@ public final class Man10Core extends JavaPlugin implements Listener {
     public void onChat(AsyncPlayerChatEvent e) {
         Player p = e.getPlayer();
         String message = e.getMessage();
-        p.sendMessage(ChatColor.RED + message);
+        if(message.contains("ohaman")){
+            p.sendMessage("あいさつしたので国王からお小遣いをもらった");
+            vaultManager.deposit(e.getPlayer().getUniqueId(),10000);
+          //  vaultManager.showBalance(e.getPlayer().getUniqueId());
+            return;
+        }
 
+
+//        vaultManager.deposit(e.getPlayer().getUniqueId(),1500);
+ //       vaultManager.withdraw(e.getPlayer().getUniqueId(),100);
+        vaultManager.showBalance(e.getPlayer().getUniqueId());
     }
-
 
     String sqlCrateChatLogTable = "CREATE TABLE `chat_log` (\n" +
             "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
@@ -97,34 +90,8 @@ public final class Man10Core extends JavaPlugin implements Listener {
             ") ENGINE=InnoDB AUTO_INCREMENT=104377 DEFAULT CHARSET=utf8;";
 
     void createTables(){
-        executeSQL(sqlCrateChatLogTable);
+        //executeSQL(sqlCrateChatLogTable);
     }
 
-    ////////////////////////////////
-    //      SQL実行
-    ////////////////////////////////
-    Boolean executeSQL(String sql){
-       // getLogger().info("executing SQL" + sql);
-        Connection conn;
-        try {
-            //      データベース作成
-            Class.forName("com.mysql.jdbc.Driver");
-            String databaseURL =  "jdbc:mysql://" + mysql_ip + "/" + mysql_db ;
-            //getLogger().info(databaseURL);
 
-            conn = DriverManager.getConnection(databaseURL,mysql_user,mysql_pass);
-            Statement st = conn.createStatement();
-            st.execute(sql);
-
-            st.close();
-            conn.close();
-            //getLogger().info("SQL performed");
-            return true;
-        } catch(ClassNotFoundException e){
-            getLogger().warning("Could not read driver");
-        } catch(SQLException e){
-            getLogger().warning("Database connection error");
-        }
-        return false;
-    }
 }
