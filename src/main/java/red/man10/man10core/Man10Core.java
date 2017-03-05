@@ -12,11 +12,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.inventivetalent.glow.GlowAPI;
-
 import java.net.InetAddress;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 
 public final class Man10Core extends JavaPlugin implements Listener {
@@ -73,18 +72,36 @@ public final class Man10Core extends JavaPlugin implements Listener {
         ////////////////////////////////
         //      GeoIPチェック
         ////////////////////////////////
+
         InetAddress ip = p.getAddress().getAddress();
         String userip = p.getAddress().getAddress().toString().substring(1);
-        String country = GeoIP.getCountry(ip);
-        String city = GeoIP.getCity(ip);
-        String timezone = GeoIP.getTimezone(ip);
-        double balance = vault.getBalance(p.getUniqueId());
-        //      ログインログ保存
-        insertLoginLog(Bukkit.getServerName(),p.getWorld().getName(),p.getName(),userip,country,city,timezone,balance,p.getUniqueId().toString());
+        String country = "";
+        String city = "";
+        String timezone = "";
 
-        //      OPには通知する
+        if (getServer().getPluginManager().getPlugin("GeoipAPI") == null) {
+            getLogger().warning("GeoipAPI plugin is not installed");
+        }else{
+            country = GeoIP.getCountry(ip);
+            city = GeoIP.getCity(ip);
+            timezone = GeoIP.getTimezone(ip);
+        }
+
+        double balance = vault.getBalance(p.getUniqueId());
+
+        //          全ユーザに通知
         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-            player.sendMessage(ChatColor.YELLOW + "ログインプレーヤ："+userip);
+            int loginCount = getLoginCount(p.getUniqueId());
+            player.sendMessage(ChatColor.YELLOW + p.getDisplayName()+"さんがログインしました");
+
+            if(loginCount != -1){
+                if(loginCount == 0) {
+                    player.sendMessage(ChatColor.GREEN +"はじめてのログインです！");
+                }{
+                    player.sendMessage(ChatColor.YELLOW +""+ loginCount+"回目のログインです");
+                }
+            }
+            //      OPには通知する
             if (player.isOp()) {
                 player.sendMessage(ChatColor.RED + "IP:"+userip);
                 player.sendMessage(ChatColor.RED + "Country:"+country);
@@ -95,6 +112,9 @@ public final class Man10Core extends JavaPlugin implements Listener {
             }
 
         }
+
+        //      ログインログ保存
+        insertLoginLog(Bukkit.getServerName(),p.getWorld().getName(),p.getName(),userip,country,city,timezone,balance,p.getUniqueId().toString());
 
     }
     /////////////////////////////////
@@ -113,7 +133,9 @@ public final class Man10Core extends JavaPlugin implements Listener {
 
         //     チャットログ保存
         insertChatLog(Bukkit.getServerName(), p.getWorld().getName(),p.getName(),message);
-        GlowAPI.setGlowing(e.getPlayer(), GlowAPI.Color.RED, Bukkit.getOnlinePlayers());
+      //  GlowAPI.setGlowing(e.getPlayer(), GlowAPI.Color.RED, Bukkit.getOnlinePlayers());
+
+        getLoginCount(p.getUniqueId());
     }
 
 
@@ -186,6 +208,24 @@ public final class Man10Core extends JavaPlugin implements Listener {
 
         long curTime = System.currentTimeMillis() / 1000L;
         mysql.execute("insert into chat_log values(0,'"+server+ "','"+world+ "','"+name+ "','" + message + "'," + curTime + ");");
+    }
+
+    //    ログイン回数を取得する
+    int  getLoginCount(UUID uuid){
+
+        int count = -1;
+        ResultSet rs  = mysql.query("select * from login_log where uuid ='" + uuid.toString()+"';");
+        serverMessage(rs.toString());
+        try{
+            rs.last();
+            count = rs.getRow();
+        }
+        catch (SQLException e)
+        {
+            this.getLogger().info("Error executing a query: " + e.getErrorCode());
+            return -1;
+        }
+        return count;
     }
 
     void showChatLog(){

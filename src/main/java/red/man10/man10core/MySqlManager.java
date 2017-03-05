@@ -97,7 +97,23 @@ public class MySQLManager {
 
         return count;
     }
+    ////////////////////////////////
+    //     レコード数
+    ////////////////////////////////
+    public int count(String table) {
+        int count = 0;
+        ResultSet set = this.query(String.format("SELECT count(*) from %s", table));
 
+        try {
+            count = set.getInt(0);
+
+        } catch (SQLException var5) {
+            Bukkit.getLogger().log(Level.SEVERE, "Could not select all rows from table: " + table + ", error: " + var5.getErrorCode());
+            return -1;
+        }
+
+        return count;
+    }
     ////////////////////////////////
     //      実行
     ////////////////////////////////
