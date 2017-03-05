@@ -108,7 +108,6 @@ public final class Man10Core extends JavaPlugin implements Listener {
                 player.sendMessage(ChatColor.RED + "City:"+city);
                 player.sendMessage(ChatColor.RED + "TimeZone:"+timezone);
                 player.sendMessage(ChatColor.RED + "Balance:"+balance);
-
             }
 
         }
@@ -136,7 +135,7 @@ public final class Man10Core extends JavaPlugin implements Listener {
       //  GlowAPI.setGlowing(e.getPlayer(), GlowAPI.Color.RED, Bukkit.getOnlinePlayers());
 
         //getLoginCount(p.getUniqueId());
-        serverMessage("レコード数" + mysql.count("login_log"));
+     //   serverMessage("レコード数" + mysql.count("login_log"));
 
     }
 
