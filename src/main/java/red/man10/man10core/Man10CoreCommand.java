@@ -35,7 +35,7 @@ public class Man10CoreCommand implements CommandExecutor {
         return false;
     }
     void showHelp(Player p){
-        p.sendMessage("§e============== §d●§f●§a●§e　Man10 Core §d●§f●§a● §e===============");
+        p.sendMessage("§e============== §d●§f●§a●§e Man10 Core §d●§f●§a● §e===============");
         p.sendMessage("§e  by takatronix http://man10.red");
         p.sendMessage("§c* red commands for Admin");
         p.sendMessage("§c/man10 chatlog");
