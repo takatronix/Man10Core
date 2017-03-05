@@ -135,7 +135,9 @@ public final class Man10Core extends JavaPlugin implements Listener {
         insertChatLog(Bukkit.getServerName(), p.getWorld().getName(),p.getName(),message);
       //  GlowAPI.setGlowing(e.getPlayer(), GlowAPI.Color.RED, Bukkit.getOnlinePlayers());
 
-        getLoginCount(p.getUniqueId());
+        //getLoginCount(p.getUniqueId());
+        serverMessage("レコード数" + mysql.count("login_log"));
+
     }
 
 

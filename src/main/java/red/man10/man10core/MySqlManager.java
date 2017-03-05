@@ -105,7 +105,7 @@ public class MySQLManager {
         ResultSet set = this.query(String.format("SELECT count(*) from %s", table));
 
         try {
-            count = set.getInt(0);
+            count = set.getInt("count(*)");
 
         } catch (SQLException var5) {
             Bukkit.getLogger().log(Level.SEVERE, "Could not select all rows from table: " + table + ", error: " + var5.getErrorCode());
