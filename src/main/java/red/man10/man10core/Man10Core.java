@@ -1,5 +1,6 @@
 package red.man10.man10core;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import org.bukkit.command.Command;
@@ -10,7 +11,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.inventivetalent.glow.GlowAPI;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 public final class Man10Core extends JavaPlugin implements Listener {
@@ -31,6 +35,7 @@ public final class Man10Core extends JavaPlugin implements Listener {
 
         vault = new VaultManager(this);
         mysql = new MySQLManager(this,"Man10Core");
+        mysql.debugMode = true;
         //   テーブル作成
         createTables();
     }
@@ -74,16 +79,12 @@ public final class Man10Core extends JavaPlugin implements Listener {
             return;
         }
 
-    }
+        GlowAPI.setGlowing(e.getPlayer(), GlowAPI.Color.RED, Bukkit.getOnlinePlayers());
+       // createTables();
 
-    String sqlCrateChatLogTable = "CREATE TABLE `chat_log` (\n" +
-            "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
-            "  `server` varchar(100) DEFAULT NULL,\n" +
-            "  `name` varchar(100) DEFAULT NULL,\n" +
-            "  `message` varchar(400) DEFAULT NULL,\n" +
-            "  `timestamp` varchar(50) DEFAULT NULL,\n" +
-            "  PRIMARY KEY (`id`)\n" +
-            ") ENGINE=InnoDB AUTO_INCREMENT=104377 DEFAULT CHARSET=utf8;";
+
+        insertMessage("Man10",p.getName(),message);
+    }
 
     String sqlMessageTable = "CREATE TABLE `chat_log` (\n" +
             "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
@@ -96,10 +97,34 @@ public final class Man10Core extends JavaPlugin implements Listener {
     void createTables(){;
         //executeSQL(sqlCrateChatLogTable);
 
-        mysql.query(sqlMessageTable);
+        mysql.execute(sqlMessageTable);
 
     }
 
+
+    void  insertMessage(String server,String name,String message){
+        String time = "1234";
+        long currTime = System.currentTimeMillis() / 1000L;
+
+        mysql.execute("insert into chat_log values(0,'"+server+ "','"+name+ "','" + message + "','" + currTime + "');");
+
+        return;
+                /*
+        final ResultSet rs = mysql.query("SELECT * FROM `messages` LIMIT 500");
+        try
+        {
+            while(rs.next())
+            {
+
+            }
+        }
+        catch (SQLException e)
+        {
+            this.getLogger().info("Error executing a query: " + e.getErrorCode());
+        }
+*/
+
+    }
     //      基本表示系
 
 

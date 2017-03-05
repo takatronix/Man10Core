@@ -15,6 +15,7 @@ import java.util.logging.Level;
 
 public class MySQLManager {
 
+    public  Boolean debugMode = false;
     private JavaPlugin plugin;
     private String HOST = null;
     private String DB = null;
@@ -98,17 +99,22 @@ public class MySQLManager {
     }
 
     ////////////////////////////////
-    //      更新
+    //      実行
     ////////////////////////////////
-    public void update(String query) {
+    public void execute(String query) {
         this.MySQL = new MySQLFunc(this.HOST, this.DB, this.USER, this.PASS,this.PORT);
         this.con = this.MySQL.open();
+
+        if (debugMode){
+            plugin.getLogger().info("query:" + query);
+        }
 
         try {
             this.st = this.con.createStatement();
             this.st.execute(query);
         } catch (SQLException var3) {
-            this.plugin.getLogger().info("[" + this.conName + "] Error executing statement: " + var3.getErrorCode());
+            this.plugin.getLogger().info("[" + this.conName + "] Error executing statement: " +var3.getErrorCode() +":"+ var3.getLocalizedMessage());
+
         }
 
         this.MySQL.close(this.con);
@@ -131,34 +137,6 @@ public class MySQLManager {
 
         return rs;
     }
-/*
-    ////////////////////////////////
-    //      SQL実行
-    ////////////////////////////////
-    Boolean executeSQL(String sql){
-        // getLogger().info("executing SQL" + sql);
-        Connection conn;
-        try {
-            //      データベース作成
-            Class.forName("com.mysql.jdbc.Driver");
-            String databaseURL =  "jdbc:mysql://" + mysql_ip + "/" + mysql_db ;
-            //getLogger().info(databaseURL);
-
-            conn = DriverManager.getConnection(databaseURL,mysql_user,mysql_pass);
-            Statement st = conn.createStatement();
-            st.execute(sql);
-
-            st.close();
-            conn.close();
-            //getLogger().info("SQL performed");
-            return true;
-        } catch(ClassNotFoundException e){
-            getLogger().warning("Could not read driver");
-        } catch(SQLException e){
-            getLogger().warning("Database connection error");
-        }
-        return false;
-    }*/
 
 
 }
