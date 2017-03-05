@@ -5,3 +5,8 @@ prefix: Man10Core
 authors: [takatronix, Sho0]
 description: Man10 Core Plugin
 website: http://man10.red
+commands:
+   man10:
+      description: Man10 Core Commands
+      permission: man10.core
+      permission-message: You don't have <permission>
