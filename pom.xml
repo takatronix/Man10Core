@@ -100,6 +100,15 @@
         </dependency>
 
         <dependency>
+            <groupId>eu.theindra.geoip</groupId>
+            <artifactId>geoip</artifactId>
+            <version>1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/GeoipAPI.jar</systemPath>
+        </dependency>
+
+
+        <dependency>
             <groupId>ru.tehkode</groupId>
             <artifactId>PermissionsEx</artifactId>
             <version>1.23.4</version>
