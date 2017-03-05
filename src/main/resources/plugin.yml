@@ -7,6 +7,6 @@ description: Man10 Core Plugin
 website: http://man10.red
 commands:
    man10:
-      description: Man10 Core Commands
+      description: Man10 Core Command
       permission: man10.core
       permission-message: You don't have <permission>
