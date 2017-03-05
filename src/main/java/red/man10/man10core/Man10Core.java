@@ -4,6 +4,7 @@ import eu.theindra.geoip.GeoIP;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,6 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
+
 import java.net.InetAddress;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -126,6 +129,8 @@ public final class Man10Core extends JavaPlugin implements Listener {
         if(message.contains("ohaman") || message.contains("おはまん")){
             p.sendMessage("あいさつしたので国王からお小遣いをもらった");
             vault.deposit(e.getPlayer().getUniqueId(),10000);
+
+            tpDefaultPoint(p);
           //  vaultManager.showBalance(e.getPlayer().getUniqueId());
             return;
         }
@@ -248,5 +253,21 @@ public final class Man10Core extends JavaPlugin implements Listener {
 
     //      基本表示系
 
+    void tpDefaultPoint(Player p){
+       double tx = this.getConfig().getDouble("tp.x");
+        double ty = this.getConfig().getDouble("tp.y");
+        double tz = this.getConfig().getDouble("tp.z");
 
+        double vx = this.getConfig().getDouble("tp.vx");
+        double vy = this.getConfig().getDouble("tp.vy");
+        double vz = this.getConfig().getDouble("tp.vz");
+
+        Vector v = new Vector(vx,vy,vz);
+        Location l = new Location(p.getWorld(), tx, ty, tz);
+
+        p.teleport(l);
+        p.getLocation().setDirection(v);
+
+
+    }
 }

@@ -9,9 +9,7 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/libs/GlowAPI_v1.4.4.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/bukkit/craftbukkit/1.9-R0.1-SNAPSHOT/craftbukkit-1.9-R0.1-20160302.181937-1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/inventivetalent/playerversion/1.3.0-SNAPSHOT/playerversion-1.3.0-20170225.075434-4.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/libs/SpigotLib.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/libs/mysql-connector-java-6.0.5.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/libs/Geoip.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/inventivetalent/particleapi/2.1.1/particleapi-2.1.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/inventivetalent/glowapi/1.4.4/glowapi-1.4.4.jar" path-in-jar="/" />
     </root>

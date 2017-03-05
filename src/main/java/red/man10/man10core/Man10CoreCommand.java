@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 /**
  * Created by takatronix on 2017/03/05.
@@ -29,6 +30,22 @@ public class Man10CoreCommand implements CommandExecutor {
 
         if (args[0].equalsIgnoreCase("help")) {
             showHelp(p);
+            return true;
+        }
+
+
+        if(args[0].equalsIgnoreCase("settp")) {
+            plugin.getConfig().set("tp.x", p.getLocation().getX());
+            plugin.getConfig().set("tp.y", p.getLocation().getY());
+            plugin.getConfig().set("tp.z", p.getLocation().getZ());
+
+            Vector v = p.getLocation().getDirection();
+
+            plugin.getConfig().set("tp.vx", v.getX());
+            plugin.getConfig().set("tp.vy", v.getY());
+            plugin.getConfig().set("tp.vz", v.getZ());
+            plugin.saveConfig();
+            p.sendMessage("§a§lTPロケーションを設定しました。");
             return true;
         }
 

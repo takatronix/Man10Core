@@ -4,3 +4,15 @@ mysql:
   pass: pass
   port: 3306
   db: man10
+message:
+  enable_broadcast: true
+  message: '&5ようこそ～%PLAYER%さん'
+  enable_prefix: true
+  prefix: '&6[&5man10hello&6]'
+tp:
+  x:
+  y:
+  z:
+  vx:
+  vy:
+  vz:
