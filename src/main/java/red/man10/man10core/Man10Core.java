@@ -82,9 +82,19 @@ public final class Man10Core extends JavaPlugin implements Listener {
         //      ログインログ保存
         insertLoginLog(Bukkit.getServerName(),p.getWorld().getName(),p.getName(),userip,country,city,timezone,balance,p.getUniqueId().toString());
 
-        GlowAPI.setGlowing(e.getPlayer(), GlowAPI.Color.RED, Bukkit.getOnlinePlayers());
+        //      OPには通知する
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+            player.sendMessage(ChatColor.YELLOW + "ログインプレーヤ："+userip);
+            if (player.isOp()) {
+                player.sendMessage(ChatColor.RED + "IP:"+userip);
+                player.sendMessage(ChatColor.RED + "Country:"+country);
+                player.sendMessage(ChatColor.RED + "City:"+city);
+                player.sendMessage(ChatColor.RED + "TimeZone:"+timezone);
+                player.sendMessage(ChatColor.RED + "Balance:"+balance);
 
+            }
 
+        }
 
     }
     /////////////////////////////////
@@ -101,10 +111,9 @@ public final class Man10Core extends JavaPlugin implements Listener {
             return;
         }
 
-
-
-       // createTables();
+        //     チャットログ保存
         insertChatLog(Bukkit.getServerName(), p.getWorld().getName(),p.getName(),message);
+        GlowAPI.setGlowing(e.getPlayer(), GlowAPI.Color.RED, Bukkit.getOnlinePlayers());
     }
 
 

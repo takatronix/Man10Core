@@ -114,7 +114,7 @@ public class MySQLManager {
             this.st.execute(query);
         } catch (SQLException var3) {
             this.plugin.getLogger().info("[" + this.conName + "] Error executing statement: " +var3.getErrorCode() +":"+ var3.getLocalizedMessage());
-
+            this.plugin.getLogger().info(query);
         }
 
         this.MySQL.close(this.con);
