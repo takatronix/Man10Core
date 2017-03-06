@@ -14,6 +14,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
+import red.man10.MySQLManager;
+import red.man10.VaultManager;
 
 import java.net.InetAddress;
 import java.sql.ResultSet;
