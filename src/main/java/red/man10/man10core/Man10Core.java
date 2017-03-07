@@ -20,6 +20,7 @@ import red.man10.VaultManager;
 import java.net.InetAddress;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -272,4 +273,23 @@ public final class Man10Core extends JavaPlugin implements Listener {
 
 
     }
+
+    public void tp(Player p,String name){
+
+
+        Object o =  getConfig().get("pos."+name);
+        if(o != null){
+            Location loc = (Location)o;
+            p.teleport(loc);
+            p.sendMessage("§a§lTPしました。");
+        }
+        return;
+    }
+    public void savePos(Player p,String name){
+
+        getConfig().set("pos."+name , p.getLocation());
+        saveConfig();
+        p.sendMessage("§a§lTPロケーションを設定しました。");
+    }
+
 }
