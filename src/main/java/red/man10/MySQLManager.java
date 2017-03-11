@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 
 /**
@@ -14,6 +16,7 @@ import java.util.logging.Level;
 
 
 public class MySQLManager {
+
 
     public  Boolean debugMode = false;
     private JavaPlugin plugin;
@@ -154,5 +157,20 @@ public class MySQLManager {
         return rs;
     }
 
+    /////////////////////////////////////
+    //      現在時刻文字列を返す
+    /////////////////////////////////////
+    public String currentTime(){
+
+        //long timestamp = 1371271256;
+        //Date date = new Date(timestamp * 1000);
+
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy'-'MM'-'dd' 'HH':'mm':'ss");
+        Bukkit.getLogger().info("datetime ");
+        String currentTime = sdf.format(date);
+        Bukkit.getLogger().info(currentTime);
+        return currentTime;
+    }
 
 }

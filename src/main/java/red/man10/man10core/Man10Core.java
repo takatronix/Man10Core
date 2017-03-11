@@ -20,6 +20,8 @@ import red.man10.VaultManager;
 import java.net.InetAddress;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -42,7 +44,7 @@ public final class Man10Core extends JavaPlugin implements Listener {
 
         vault = new VaultManager(this);
         mysql = new MySQLManager(this,"Man10Core");
-        //mysql.debugMode = true;
+        mysql.debugMode = true;
         //   テーブル作成
         createTables();
 
@@ -155,11 +157,11 @@ public final class Man10Core extends JavaPlugin implements Listener {
             "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
             "  `server` varchar(100) DEFAULT NULL,\n" +
             "  `world` varchar(100) DEFAULT NULL,\n" +
-            "  `name` varchar(100) DEFAULT NULL,\n" +
+            "  `name` varchar(40) NOT NULL DEFAULT '',\n" +
             "  `message` varchar(400) DEFAULT NULL,\n" +
-            "  `timestamp` int(50) DEFAULT NULL,\n" +
+            "  `time` datetime DEFAULT NULL,\n" +
             "  PRIMARY KEY (`id`)\n" +
-            ") ENGINE=InnoDB AUTO_INCREMENT=188 DEFAULT CHARSET=utf8;";
+            ") ENGINE=InnoDB AUTO_INCREMENT=3304 DEFAULT CHARSET=utf8;";
     ///////////////////////////////////////////
     //      ログインテーブル
     ///////////////////////////////////////////
@@ -174,9 +176,9 @@ public final class Man10Core extends JavaPlugin implements Listener {
             "  `timezone` varchar(100) DEFAULT NULL,\n" +
             "  `balance` double DEFAULT NULL,\n" +
             "  `uuid` varchar(100) DEFAULT NULL,\n" +
-            "  `timestamp` int(50) DEFAULT NULL,\n" +
+            "  `time` datetime DEFAULT NULL,\n" +
             "  PRIMARY KEY (`id`)\n" +
-            ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+            ") ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;";
 
     void createTables(){;
 
@@ -198,7 +200,7 @@ public final class Man10Core extends JavaPlugin implements Listener {
     //      ログインログ保存
     /////////////////////////////////
     void  insertLoginLog(String server,String world,String name,String ip,String country,String city,String timezone,double balance,String uuid){
-        long curTime = System.currentTimeMillis() / 1000L;
+
         mysql.execute("insert into login_log values(0,'"+server+ "','"+world+ "','"+name
                         +"','" + ip
                         +"','" + country
@@ -206,7 +208,7 @@ public final class Man10Core extends JavaPlugin implements Listener {
                         +"','" + timezone
                         +"'," + balance
                         +",'" + uuid
-                        +"'," + curTime
+                        +"'," + currentTime()
                         +");");
 
     }
@@ -215,8 +217,21 @@ public final class Man10Core extends JavaPlugin implements Listener {
     //////////////////////////////////
     void  insertChatLog(String server,String world,String name,String message){
 
-        long curTime = System.currentTimeMillis() / 1000L;
-        mysql.execute("insert into chat_log values(0,'"+server+ "','"+world+ "','"+name+ "','" + message + "'," + curTime + ");");
+
+
+        mysql.execute("insert into chat_log values(0,'"+server+ "','"+world+ "','"+name+ "','" + message + "'," + currentTime() + ");");
+    }
+    public String currentTime(){
+
+        //long timestamp = 1371271256;
+        //Date date = new Date(timestamp * 1000);
+
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy'-'MM'-'dd' 'HH':'mm':'ss");
+        Bukkit.getLogger().info("datetime ");
+        String currentTime = "'"+sdf.format(date)+"'";
+        Bukkit.getLogger().info(currentTime);
+        return currentTime;
     }
 
     //    ログイン回数を取得する
@@ -224,7 +239,7 @@ public final class Man10Core extends JavaPlugin implements Listener {
 
         int count = -1;
         ResultSet rs  = mysql.query("select * from login_log where uuid ='" + uuid.toString()+"';");
-        serverMessage(rs.toString());
+       // serverMessage(rs.toString());
         try{
             rs.last();
             count = rs.getRow();
@@ -257,20 +272,7 @@ public final class Man10Core extends JavaPlugin implements Listener {
     //      基本表示系
 
     void tpDefaultPoint(Player p){
-       double tx = this.getConfig().getDouble("tp.x");
-        double ty = this.getConfig().getDouble("tp.y");
-        double tz = this.getConfig().getDouble("tp.z");
-
-        double vx = this.getConfig().getDouble("tp.vx");
-        double vy = this.getConfig().getDouble("tp.vy");
-        double vz = this.getConfig().getDouble("tp.vz");
-
-        Vector v = new Vector(vx,vy,vz);
-        Location l = new Location(p.getWorld(), tx, ty, tz);
-
-        p.teleport(l);
-        p.getLocation().setDirection(v);
-
+        tp(p,"Lobby");
 
     }
 
