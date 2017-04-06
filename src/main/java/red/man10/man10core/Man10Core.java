@@ -16,6 +16,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 import red.man10.MySQLManager;
 import red.man10.VaultManager;
+import red.man10.man10Home.Man10Home;
+import red.man10.man10Home.Man10HomeAdmin;
 
 import java.net.InetAddress;
 import java.sql.ResultSet;
@@ -49,6 +51,8 @@ public final class Man10Core extends JavaPlugin implements Listener {
         createTables();
 
         getCommand("man10").setExecutor(new Man10CoreCommand(this));
+        getCommand("mhome").setExecutor(new Man10HomeAdmin(this));
+        getCommand("home").setExecutor(new Man10Home(this));
     }
 
     /////////////////////////////////
