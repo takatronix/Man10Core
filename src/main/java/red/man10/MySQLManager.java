@@ -2,12 +2,11 @@ package red.man10;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Level;
 
 /**
@@ -16,7 +15,6 @@ import java.util.logging.Level;
 
 
 public class MySQLManager {
-
 
     public  Boolean debugMode = false;
     private JavaPlugin plugin;
@@ -50,6 +48,7 @@ public class MySQLManager {
     //       設定ファイル読み込み
     /////////////////////////////////
     public void loadConfig(){
+        plugin.getLogger().info("MYSQL Config loading");
         plugin.reloadConfig();
         HOST = plugin.getConfig().getString("mysql.host");
         USER = plugin.getConfig().getString("mysql.user");
@@ -69,6 +68,10 @@ public class MySQLManager {
         this.PASS = pass;
         this.MySQL = new MySQLFunc(host, db, user, pass,port);
         this.con = this.MySQL.open();
+        if(this.con == null){
+            Bukkit.getLogger().info("failed to open MYSQL");
+            return false;
+        }
 
         try {
             this.st = this.con.createStatement();
@@ -120,10 +123,14 @@ public class MySQLManager {
     ////////////////////////////////
     //      実行
     ////////////////////////////////
-    public void execute(String query) {
+    public boolean execute(String query) {
         this.MySQL = new MySQLFunc(this.HOST, this.DB, this.USER, this.PASS,this.PORT);
         this.con = this.MySQL.open();
-
+        if(this.con == null){
+            Bukkit.getLogger().info("failed to open MYSQL");
+            return false;
+        }
+        boolean ret = true;
         if (debugMode){
             plugin.getLogger().info("query:" + query);
         }
@@ -134,9 +141,12 @@ public class MySQLManager {
         } catch (SQLException var3) {
             this.plugin.getLogger().info("[" + this.conName + "] Error executing statement: " +var3.getErrorCode() +":"+ var3.getLocalizedMessage());
             this.plugin.getLogger().info(query);
+            ret = false;
+
         }
 
         this.MySQL.close(this.con);
+        return ret;
     }
 
     ////////////////////////////////
@@ -146,6 +156,17 @@ public class MySQLManager {
         this.MySQL = new  MySQLFunc(this.HOST, this.DB, this.USER, this.PASS,this.PORT);
         this.con = this.MySQL.open();
         ResultSet rs = null;
+        if(this.con == null){
+            Bukkit.getLogger().info("failed to open MYSQL");
+            return rs;
+        }
+
+
+
+
+        if (debugMode){
+            plugin.getLogger().info("query:" + query);
+        }
 
         try {
             this.st = this.con.createStatement();
@@ -157,20 +178,5 @@ public class MySQLManager {
         return rs;
     }
 
-    /////////////////////////////////////
-    //      現在時刻文字列を返す
-    /////////////////////////////////////
-    public String currentTime(){
-
-        //long timestamp = 1371271256;
-        //Date date = new Date(timestamp * 1000);
-
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy'-'MM'-'dd' 'HH':'mm':'ss");
-        Bukkit.getLogger().info("datetime ");
-        String currentTime = sdf.format(date);
-        Bukkit.getLogger().info(currentTime);
-        return currentTime;
-    }
 
 }

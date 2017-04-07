@@ -5,38 +5,35 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
+import red.man10.Man10Home.*;
 import red.man10.MySQLManager;
 import red.man10.VaultManager;
-import red.man10.man10Home.Man10Home;
-import red.man10.man10Home.Man10HomeAdmin;
 
 import java.net.InetAddress;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 import java.util.UUID;
 
 
 public final class Man10Core extends JavaPlugin implements Listener {
 
+    public String home_prefix = "§9[§6home§9]§f";
 
-    VaultManager vault = null;
-    MySQLManager mysql = null;
+    public VaultManager vault = null;
+    public MySQLManager mysql = null;
 
     /////////////////////////////////
     //      起動
     /////////////////////////////////
+
     @Override
     public void onEnable() {
         getLogger().info("Enabled");
@@ -53,6 +50,9 @@ public final class Man10Core extends JavaPlugin implements Listener {
         getCommand("man10").setExecutor(new Man10CoreCommand(this));
         getCommand("mhome").setExecutor(new Man10HomeAdmin(this));
         getCommand("home").setExecutor(new Man10Home(this));
+        getCommand("sethome").setExecutor(new Man10SetHome(this));
+        getCommand("delhome").setExecutor(new Man10DeleteHome(this));
+        getCommand("homelist").setExecutor(new Man10HomeList(this));
     }
 
     /////////////////////////////////
@@ -61,15 +61,6 @@ public final class Man10Core extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         getLogger().info("Disabled");
-    }
-
-    /////////////////////////////////
-    //      コマンド処理
-    /////////////////////////////////
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        Player p = (Player) sender;
-        return true;
     }
 
     /////////////////////////////////
@@ -183,9 +174,23 @@ public final class Man10Core extends JavaPlugin implements Listener {
             "  `time` datetime DEFAULT NULL,\n" +
             "  PRIMARY KEY (`id`)\n" +
             ") ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;";
+    String sqlHomeTable = "CREATE TABLE `man10_home` (\n" +
+            "  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,\n" +
+            "  `uuid` varchar(40) NOT NULL DEFAULT '',\n" +
+            "  `username` varchar(20) DEFAULT '',\n" +
+            "  `name` varchar(64) NOT NULL DEFAULT '',\n" +
+            "  `world` varchar(64) DEFAULT NULL,\n" +
+            "  `x` double NOT NULL,\n" +
+            "  `y` double NOT NULL,\n" +
+            "  `z` double NOT NULL,\n" +
+            "  `pitch` double NOT NULL,\n" +
+            "  `yaw` double NOT NULL,\n" +
+            "  `datetime` datetime DEFAULT NULL,\n" +
+            "  PRIMARY KEY (`id`)\n" +
+            ") ENGINE=InnoDB DEFAULT CHARSET=utf8;\n";
+    void createTables(){
 
-    void createTables(){;
-
+        mysql.execute(sqlHomeTable);
         mysql.execute(sqlChatTable);
         mysql.execute(sqlLoginTable);
 
@@ -220,11 +225,9 @@ public final class Man10Core extends JavaPlugin implements Listener {
     //      チャットログ保存
     //////////////////////////////////
     void  insertChatLog(String server,String world,String name,String message){
-
-
-
         mysql.execute("insert into chat_log values(0,'"+server+ "','"+world+ "','"+name+ "','" + message + "'," + currentTime() + ");");
     }
+
     public String currentTime(){
 
         //long timestamp = 1371271256;

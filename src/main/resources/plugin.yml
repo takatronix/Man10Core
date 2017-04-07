@@ -10,3 +10,18 @@ commands:
       description: Man10 Core Command
       permission: man10.core
       permission-message: You don't have <permission>
+   home:
+      permission: man10.home
+      permission-message: You don't have <permission>
+   mhome:
+      permission: man10.home.admin
+      permission-message: You don't have <permission>
+   sethome:
+      permission: man10.home
+      permission-message: You don't have <permission>
+   delhome:
+      permission: man10.home
+      permission-message: You don't have <permission>
+   homelist:
+      permission: man10.home
+      permission-message: You don't have <permission>
