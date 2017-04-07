@@ -21,9 +21,10 @@ public class Man10SetHome implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player p = (Player) sender;
-        if(args.length != 1){
-            p.sendMessage(plugin.home_prefix + "コマンドの使い方が間違ってます /sethome <ホーム名>");
-            return false;
+        if(args.length == 0){
+            insertHome(p.getUniqueId(), p.getName(), "__default__", p.getLocation().getWorld().getName(), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), p.getLocation().getPitch(), p.getLocation().getYaw());
+            p.sendMessage(plugin.home_prefix + "ホームをセットしました");
+            return true;
         }
         insertHome(p.getUniqueId(), p.getName(), args[0], p.getLocation().getWorld().getName(), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), p.getLocation().getPitch(), p.getLocation().getYaw());
         p.sendMessage(plugin.home_prefix + "ホームをセットしました");

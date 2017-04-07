@@ -1,16 +1,18 @@
 package red.man10.Man10Home;
 
+import com.mysql.cj.api.mysqla.result.Resultset;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import red.man10.man10core.Man10Core;
 
+import javax.xml.transform.Result;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.UUID;
-
 /**
  * Created by sho-pc on 2017/04/06.
  */
@@ -73,6 +75,31 @@ public class Man10HomeAdmin implements CommandExecutor {
             p.sendMessage(plugin.home_prefix + "ホームをクリアしました");
             return true;
         }
+        if(args[0].equalsIgnoreCase("goto")){
+            if(args.length < 3) {
+                p.sendMessage(plugin.home_prefix + "コマンドの使い方が間違っています /mhome goto <player> <name>");
+            }
+            Player player = Bukkit.getPlayer(args[1]);
+            if(player == null){
+                p.sendMessage(plugin.home_prefix + "プレイヤーは存在しません");
+                return false;
+            }
+            ResultSet result = plugin.mysql.query("SELECT * FROM `man10_home` WHERE uuid = '" + player.getUniqueId() + "' and name = '" + args[2] + "'");
+            try {
+                while(result.next()){
+                    World world = Bukkit.getServer().getWorld(result.getString("world"));
+                    float pich = (float) result.getDouble("pitch");
+                    float yaw = (float) result.getDouble("yaw");
+                    Location loc = new Location(world,result.getDouble("x"),result.getDouble("y"),result.getDouble("z"),pich,yaw);
+                    p.teleport(loc);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            p.sendMessage(plugin.home_prefix + "テレポートしました");
+            return true;
+
+        }
         help(p);
         return true;
     }
@@ -81,9 +108,13 @@ public class Man10HomeAdmin implements CommandExecutor {
         p.sendMessage("§b/mhome list <player> プレイヤーのホームを見る");
         p.sendMessage("§b/mhome delete <player> <home name> プレイヤーのホームを削除");
         p.sendMessage("§b/mhome clear <player> プレイヤーのホームをクリア");
-
-
-
-
+        p.sendMessage("§b/mhome goto <player> <name> プレイヤーのホームに飛ぶ");
+    }
+    void tp(Player p,String world,double x,double y,double z,double ya,double pi){
+        World w = Bukkit.getWorld(world);
+        float yaw = (float) ya;
+        float pitch = (float) pi;
+        Location l = new Location(w,x,y,z,yaw,pitch);
+        p.teleport(l);
     }
 }

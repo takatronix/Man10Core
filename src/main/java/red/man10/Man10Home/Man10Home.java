@@ -27,9 +27,30 @@ public class Man10Home implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player p = (Player) sender;
-        if (args.length != 1) {
-            p.sendMessage(plugin.home_prefix + "コマンドの使い方が間違ってます /home <ホーム名>");
-            return false;
+        if(args.length == 0){
+            int count = 0;
+            ResultSet result = plugin.mysql.query("SELECT * FROM `man10_home` WHERE uuid = '" + p.getUniqueId() + "' and name = '__default__';");
+            try {
+                while (result.next()) {
+                    World w = Bukkit.getServer().getWorld(result.getString("world"));
+                    double x = result.getDouble("x");
+                    double y = result.getDouble("y");
+                    double z = result.getDouble("z");
+                    float pitch = (float) result.getDouble("pitch");
+                    float yaw = (float) result.getDouble("yaw");
+                    Location l = new Location(w,x,y,z,yaw,pitch);
+                    p.teleport(l);
+                    count++;
+                }
+                if(count == 0){
+                    p.sendMessage(plugin.home_prefix + "ホームが存在しません");
+                    return false;
+                }
+                p.sendMessage(plugin.home_prefix + "ホームへテレポートしました");
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         int count = 0;
         ResultSet result = plugin.mysql.query("SELECT * FROM `man10_home` WHERE uuid = '" + p.getUniqueId() + "' and name = '" + args[0] + "';");
